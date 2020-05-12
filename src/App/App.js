@@ -7,6 +7,7 @@ import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
 import { getNotesForFolder, findNote, findFolder } from '../notes-helpers';
 import './App.css';
+import Config from './../config'
 
 class App extends Component {
   state = {
@@ -15,13 +16,20 @@ class App extends Component {
   };
 
   componentDidMount() {
+    const getObj = {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: `Bearer ${Config.API_KEY}`,
+      })
+    }
+
     // fake date loading from API call
     let notes;
     let folders;
-    fetch("http://localhost:8000/notes")
+    fetch("http://localhost:8000/notes", getObj)
       .then(res => {
         if (!res.ok) {
-          return 'error'
+          throw Error("Failed to fetch");
         }
         else {
           return res.json();
@@ -31,11 +39,12 @@ class App extends Component {
         notes = resJson;
         this.setState({ notes: notes });
       })
+      .catch((err) => console.log(err));
 
-    fetch("http://localhost:8000/folders")
+    fetch("http://localhost:8000/folders", getObj)
       .then(res => {
         if (!res.ok) {
-          return 'error'
+          throw Error("Failed to fetch");
         }
         else {
           return res.json();
@@ -45,6 +54,7 @@ class App extends Component {
         folders = resJson;
         this.setState({ folders: folders });
       })
+      .catch((err) => console.log(err));
   }
 
   renderNavRoutes() {
