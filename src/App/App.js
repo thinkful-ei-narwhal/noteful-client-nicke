@@ -26,7 +26,7 @@ class App extends Component {
     // fake date loading from API call
     let notes;
     let folders;
-    fetch("http://localhost:8000/notes", getObj)
+    fetch(`${Config.API_ENDPOINT}/notes`, getObj)
       .then(res => {
         if (!res.ok) {
           throw Error("Failed to fetch");
@@ -41,7 +41,7 @@ class App extends Component {
       })
       .catch((err) => console.log(err));
 
-    fetch("http://localhost:8000/folders", getObj)
+    fetch(`${Config.API_ENDPOINT}/folders`, getObj)
       .then(res => {
         if (!res.ok) {
           throw Error("Failed to fetch");
